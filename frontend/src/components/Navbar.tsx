@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { BiDonateHeart } from "react-icons/bi";
-import logo from '../assets/rccg.png';
+// import logo from '../assets/rccg.png';
 
 const navLinks = [
   { label: 'Our Story', href: '#about' },
