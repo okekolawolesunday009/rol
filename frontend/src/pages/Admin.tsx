@@ -5,6 +5,12 @@ import { useVideoSermons } from '../hooks/useVideoSermons';
 import { useEvents } from '../hooks/useEvents';
 import type { AudioSermon, VideoSermon, ChurchEvent, AdminTab } from '../types';
 
+const tabs: { id: AdminTab; label: string; icon: string }[] = [
+  { id: 'audio', label: 'Audio', icon: 'headphones' },
+  { id: 'video', label: 'Video', icon: 'play_circle' },
+  { id: 'events', label: 'Events', icon: 'event' },
+];
+
 // ─── Login Screen ─────────────────────────────────────────────────────────────
 function LoginScreen({ onLogin }: { onLogin: (email: string, pass: string) => Promise<{ success: boolean; error?: string }> }) {
   const [email, setEmail] = useState('');
