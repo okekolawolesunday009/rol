@@ -4,7 +4,7 @@ export const events: ChurchEvent[] = [
   {
     id: 'event-1',
     title: 'Missions Weekend 2024',
-    date: '14',
+    date: '5',
     month: 'MARCH',
     time: '9:00 AM',
     location: 'Main Auditorium',
@@ -14,7 +14,7 @@ export const events: ChurchEvent[] = [
   {
     id: 'event-2',
     title: 'Night of Destiny',
-    date: '22',
+    date: '3',
     month: 'MARCH',
     time: '10:00 PM',
     location: 'Sanctuary',
@@ -34,7 +34,7 @@ export const events: ChurchEvent[] = [
   {
     id: 'event-4',
     title: 'Annual Family Picnic',
-    date: '20',
+    date: '5',
     month: 'APRIL',
     time: '12:00 PM',
     location: 'Church Grounds',

@@ -1,18 +1,21 @@
 import HeroSection from '../sections/HeroSection';
 import AboutSection from '../sections/AboutSection';
-import AudioSermonsSection from '../sections/AudioSermonsSection';
 import GallerySection from '../sections/GallerySection';
-import EventsSection from '../sections/EventsSection';
+import WeeklyServicesSection from '../sections/WeeklyServicesSection';
+import EventTab from '../sections/EventTab';
 
 export default function Home() {
   return (
     <>
       <HeroSection />
+      <EventTab />
       <AboutSection />
-      <AudioSermonsSection />
+      {/* <AudioSermonsSection /> */}
       
       <GallerySection />
-      <EventsSection />
+      <WeeklyServicesSection />
+
+      {/* <EventsSection /> */}
     </>
   );
 }

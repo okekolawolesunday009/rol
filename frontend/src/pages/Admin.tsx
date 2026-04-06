@@ -1,26 +1,26 @@
 import { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { audioSermons as initialAudio } from '../data/audioSermons';
-import { videoSermons as initialVideo } from '../data/videoSermons';
-import { events as initialEvents } from '../data/events';
+import { useAudioSermons } from '../hooks/useAudioSermons';
+import { useVideoSermons } from '../hooks/useVideoSermons';
+import { useEvents } from '../hooks/useEvents';
 import type { AudioSermon, VideoSermon, ChurchEvent, AdminTab } from '../types';
 
 // ─── Login Screen ─────────────────────────────────────────────────────────────
-function LoginScreen({ onLogin }: { onLogin: (email: string, pass: string) => boolean }) {
+function LoginScreen({ onLogin }: { onLogin: (email: string, pass: string) => Promise<{ success: boolean; error?: string }> }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    setTimeout(() => {
-      const ok = onLogin(email, password);
-      if (!ok) setError('Invalid credentials. Please try again.');
-      setLoading(false);
-    }, 600);
+    const result = await onLogin(email, password);
+    if (!result.success) {
+      setError(result.error || 'Login failed');
+    }
+    setLoading(false);
   };
 
   return (
@@ -94,27 +94,15 @@ function LoginScreen({ onLogin }: { onLogin: (email: string, pass: string) => bo
 // ─── Admin Dashboard ──────────────────────────────────────────────────────────
 function AdminDashboard() {
   const { user, logout } = useAuth();
+  const { sermons: audios, addSermon: addAudio, deleteSermon: deleteAudio } = useAudioSermons();
+  const { sermons: videos, addSermon: addVideo, deleteSermon: deleteVideo } = useVideoSermons();
+  const { events: eventsData, addEvent, deleteEvent } = useEvents();
   const [activeTab, setActiveTab] = useState<AdminTab>('audio');
-
-  // Local editable copies of data
-  const [audios, setAudios] = useState<AudioSermon[]>(initialAudio);
-  const [videos, setVideos] = useState<VideoSermon[]>(initialVideo);
-  const [eventsData, setEventsData] = useState<ChurchEvent[]>(initialEvents);
 
   // Generic modal state
   const [showAddAudio, setShowAddAudio] = useState(false);
   const [showAddVideo, setShowAddVideo] = useState(false);
   const [showAddEvent, setShowAddEvent] = useState(false);
-
-  const tabs: { id: AdminTab; label: string; icon: string }[] = [
-    { id: 'audio', label: 'Audio Sermons', icon: 'headphones' },
-    { id: 'video', label: 'Video Messages', icon: 'play_circle' },
-    { id: 'events', label: 'Events', icon: 'event' },
-  ];
-
-  const deleteAudio = (id: string) => setAudios((a) => a.filter((x) => x.id !== id));
-  const deleteVideo = (id: string) => setVideos((v) => v.filter((x) => x.id !== id));
-  const deleteEvent = (id: string) => setEventsData((e) => e.filter((x) => x.id !== id));
 
   return (
     <div className="min-h-screen bg-background">
@@ -265,9 +253,13 @@ function AdminDashboard() {
       {showAddAudio && (
         <AddAudioModal
           onClose={() => setShowAddAudio(false)}
-          onAdd={(s) => {
-            setAudios((prev) => [s, ...prev]);
-            setShowAddAudio(false);
+          onAdd={async (sermon) => {
+            try {
+              await addAudio(sermon);
+              setShowAddAudio(false);
+            } catch (error) {
+              console.error('Failed to add audio sermon:', error);
+            }
           }}
         />
       )}
@@ -276,9 +268,13 @@ function AdminDashboard() {
       {showAddVideo && (
         <AddVideoModal
           onClose={() => setShowAddVideo(false)}
-          onAdd={(v) => {
-            setVideos((prev) => [v, ...prev]);
-            setShowAddVideo(false);
+          onAdd={async (video) => {
+            try {
+              await addVideo(video);
+              setShowAddVideo(false);
+            } catch (error) {
+              console.error('Failed to add video sermon:', error);
+            }
           }}
         />
       )}
@@ -287,9 +283,13 @@ function AdminDashboard() {
       {showAddEvent && (
         <AddEventModal
           onClose={() => setShowAddEvent(false)}
-          onAdd={(e) => {
-            setEventsData((prev) => [e, ...prev]);
-            setShowAddEvent(false);
+          onAdd={async (event) => {
+            try {
+              await addEvent(event);
+              setShowAddEvent(false);
+            } catch (error) {
+              console.error('Failed to add event:', error);
+            }
           }}
         />
       )}
@@ -307,9 +307,23 @@ function AdminRow({
   title: string;
   subtitle: string;
   icon: string;
-  onDelete: () => void;
+  onDelete: () => Promise<void>;
 }) {
   const [confirm, setConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleDelete = async () => {
+    setLoading(true);
+    try {
+      await onDelete();
+      setConfirm(false);
+    } catch (error) {
+      console.error('Failed to delete:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex items-center justify-between bg-surface-container border border-white/5 rounded-lg px-5 py-4 group hover:border-white/10 transition-all">
       <div className="flex items-center gap-4 min-w-0">
@@ -323,14 +337,16 @@ function AdminRow({
         {confirm ? (
           <>
             <button
-              onClick={onDelete}
-              className="text-error font-body text-xs font-bold uppercase tracking-widest hover:underline"
+              onClick={handleDelete}
+              disabled={loading}
+              className="text-error font-body text-xs font-bold uppercase tracking-widest hover:underline disabled:opacity-50"
             >
-              Confirm Delete
+              {loading ? 'Deleting...' : 'Confirm Delete'}
             </button>
             <button
               onClick={() => setConfirm(false)}
-              className="text-on-surface-variant font-body text-xs uppercase tracking-widest hover:text-white"
+              disabled={loading}
+              className="text-on-surface-variant font-body text-xs uppercase tracking-widest hover:text-white disabled:opacity-50"
             >
               Cancel
             </button>
@@ -408,15 +424,15 @@ function AddAudioModal({
   onAdd,
 }: {
   onClose: () => void;
-  onAdd: (s: AudioSermon) => void;
+  onAdd: (s: Omit<AudioSermon, 'id'>) => Promise<void>;
 }) {
-  const [form, setForm] = useState({ title: '', speaker: '', audioUrl: '', duration: '', series: '' });
+  const [form, setForm] = useState({ title: '', speaker: '', audioUrl: '', duration: '', date: '', description: '', series: '' });
   const update = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onAdd({ ...form, id: `audio-${Date.now()}`, date: new Date().toISOString().slice(0, 10) });
+    await onAdd(form);
   };
 
   return (
@@ -426,6 +442,8 @@ function AddAudioModal({
         <FormField id="new-audio-speaker" label="Speaker *" value={form.speaker} onChange={update('speaker')} required placeholder="Pastor Name" />
         <FormField id="new-audio-url" label="Audio URL *" type="url" value={form.audioUrl} onChange={update('audioUrl')} required placeholder="https://..." />
         <FormField id="new-audio-duration" label="Duration" value={form.duration} onChange={update('duration')} placeholder="48:22" />
+        <FormField id="new-audio-date" label="Date" type="date" value={form.date} onChange={update('date')} placeholder="2024-03-10" />
+        <FormField id="new-audio-description" label="Description" value={form.description} onChange={update('description')} placeholder="Sermon description" />
         <FormField id="new-audio-series" label="Series" value={form.series} onChange={update('series')} placeholder="Series name" />
         <div className="flex gap-3 pt-2">
           <button type="submit" className="flex-1 bg-tertiary text-on-tertiary font-bold text-sm py-3 rounded hover:bg-tertiary/90 transition-all">
@@ -445,15 +463,15 @@ function AddVideoModal({
   onAdd,
 }: {
   onClose: () => void;
-  onAdd: (v: VideoSermon) => void;
+  onAdd: (v: Omit<VideoSermon, 'id'>) => Promise<void>;
 }) {
-  const [form, setForm] = useState({ title: '', videoUrl: '', thumbnail: '', speaker: '', duration: '' });
+  const [form, setForm] = useState({ title: '', videoUrl: '', thumbnail: '', speaker: '', duration: '', date: '', description: '' });
   const update = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onAdd({ ...form, id: `video-${Date.now()}`, date: new Date().toISOString().slice(0, 10) });
+    await onAdd(form);
   };
 
   return (
@@ -464,6 +482,8 @@ function AddVideoModal({
         <FormField id="new-video-thumbnail" label="Thumbnail URL" type="url" value={form.thumbnail} onChange={update('thumbnail')} placeholder="https://img.youtube.com/vi/.../maxresdefault.jpg" />
         <FormField id="new-video-speaker" label="Speaker" value={form.speaker} onChange={update('speaker')} placeholder="Pastor Name" />
         <FormField id="new-video-duration" label="Duration" value={form.duration} onChange={update('duration')} placeholder="52:10" />
+        <FormField id="new-video-date" label="Date" type="date" value={form.date} onChange={update('date')} placeholder="2024-03-10" />
+        <FormField id="new-video-description" label="Description" value={form.description} onChange={update('description')} placeholder="Video description" />
         <div className="flex gap-3 pt-2">
           <button type="submit" className="flex-1 bg-tertiary text-on-tertiary font-bold text-sm py-3 rounded hover:bg-tertiary/90 transition-all">
             Add Video
@@ -482,15 +502,15 @@ function AddEventModal({
   onAdd,
 }: {
   onClose: () => void;
-  onAdd: (e: ChurchEvent) => void;
+  onAdd: (e: Omit<ChurchEvent, 'id'>) => Promise<void>;
 }) {
   const [form, setForm] = useState({ title: '', date: '', month: '', time: '', location: '', description: '', ctaLabel: 'Register' });
   const update = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onAdd({ ...form, id: `event-${Date.now()}` });
+    await onAdd(form);
   };
 
   return (

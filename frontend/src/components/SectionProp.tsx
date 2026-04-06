@@ -2,6 +2,8 @@ type SectionProps = {
   children: React.ReactNode;
   bgColor?: string;
   bgImage?: string;
+  bgPosition?: string;
+  bgSize?: string;
   overlay?: string;
   className?: string;
   id?: string | undefined;
@@ -9,26 +11,30 @@ type SectionProps = {
 
 export default function Section({
   children,
-    id,
+  id,
   bgColor = "bg-white",
   bgImage,
-  overlay = "bg-gradient-to-l from-black/70 via-black/50 to-transparent"
+  bgPosition = "center",
+  bgSize = "cover",
+  overlay = "",
+  className,
 }: SectionProps) {
   return (
     <section
       id={id}
-      className={`relative py-16 ${bgColor}`}
+      className={`relative py-16 ${bgColor} ${className ?? ""}`.trim()}
       style={
         bgImage
           ? {
               backgroundImage: `url(${bgImage})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
+              backgroundSize: bgSize,
+              backgroundPosition: bgPosition,
+              backgroundRepeat: "no-repeat",
             }
           : {}
       }
     >
-      {bgImage && (
+      {overlay && (
         <div className={`absolute inset-0 ${overlay}`} />
       )}
 

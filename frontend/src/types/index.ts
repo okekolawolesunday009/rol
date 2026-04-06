@@ -9,6 +9,8 @@ export interface AudioSermon {
   date?: string;
   description?: string;
   series?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface VideoSermon {
@@ -20,6 +22,8 @@ export interface VideoSermon {
   speaker?: string;
   date?: string;
   duration?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface ChurchEvent {
@@ -31,6 +35,8 @@ export interface ChurchEvent {
   location: string;       // e.g. "Main Auditorium"
   description?: string;
   ctaLabel?: string;      // e.g. "Register" | "Details" | "Join Us"
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface GalleryItem {
@@ -48,5 +54,4 @@ export type AdminTab = 'audio' | 'video' | 'events';
 
 export interface AdminUser {
   email: string;
-  token: string;
 }

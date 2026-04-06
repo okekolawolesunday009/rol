@@ -1,8 +1,36 @@
 import EventCard from '../components/EventCard';
 import Section from '../components/SectionProp';
-import { events } from '../data/events';
+import { useEvents } from '../hooks/useEvents';
+import { events as mockEvents } from '../data/events';
 
 export default function EventsSection() {
+  const { events, loading, error } = useEvents();
+  const displayEvents = events?.length ? events : mockEvents;
+
+  if (loading) {
+    return (
+      <Section bgColor='bg-black' id="events" className="py-32 bg-background">
+        <div className="max-w-7xl mx-auto px-6 md:px-8">
+          <div className="text-center text-white">Loading events...</div>
+        </div>
+      </Section>
+    );
+  }
+
+  if (error && !events?.length) {
+    // If there's an error and no backend events, we'll fall back to mock data below
+  }
+
+  if (!displayEvents?.length) {
+    return (
+      <Section bgColor='bg-black' id="events" className="py-32 bg-background">
+        <div className="max-w-7xl mx-auto px-6 md:px-8">
+          <div className="text-center text-red-400">No events available.</div>
+        </div>
+      </Section>
+    );
+  }
+
   return (
     <Section bgColor='bg-black' id="events" className="py-32 bg-background">
       <div className="max-w-7xl mx-auto px-6 md:px-8">
@@ -22,10 +50,10 @@ export default function EventsSection() {
 
         {/* Events List */}
         <div className="space-y-2">
-          {events.map((event, idx) => (
+          {displayEvents.map((event, idx) => (
             <div
               key={event.id}
-              className={idx === events.length - 1 ? 'border-b border-white/5' : ''}
+              className={idx === displayEvents.length - 1 ? 'border-b border-white/5' : ''}
             >
               <EventCard event={event} />
             </div>

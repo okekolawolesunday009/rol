@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { BiDonateHeart } from "react-icons/bi";
+import logo from '../assets/rccg.png';
 
 const navLinks = [
   { label: 'Our Story', href: '#about' },
@@ -20,25 +22,27 @@ export default function Navbar() {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const navThemeClasses = 'bg-surface/95 text-foreground border-b border-outline shadow-sm glass-nav backdrop-blur-sm';
+  const navThemeClasses = 'bg-gray-100  text-foreground border-b border-outline shadow-sm glass-nav backdrop-blur-sm';
 
-  const linkTheme = ' hover:text-primary';
+  const linkTheme = ' text-black hover:text-primary';
 
   const buttonTheme = 'hover:text-slate-800';
 
   return (
     <nav
-      className={`fixed top-0 w-full z-50 bg-background ${navThemeClasses}`}
+      className={`fixed top-0 w-full z-50  ${navThemeClasses}`}
     >
       <div className="flex justify-between items-center max-w-7xl mx-auto px-6 md:px-8 py-5">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-4 group">
-          <div className="w-10 h-10 border-2 border-primary rounded-full flex items-center justify-center transition-all group-hover:bg-primary/10">
+          {/* <div className="w-10 h-10 border-2 border-primary rounded-full flex items-center justify-center transition-all group-hover:bg-primary/10">
             <span className="text-primary font-headline text-xl italic">Ω</span>
           </div>
           <span className="text-2xl font-headline text-background tracking-tighter uppercase">
             RCCG LP17 HQ
-          </span>
+          </span> */}
+
+          {/* <img src={logo} alt="RCCG LP17 HQ Logo" width={50} height={50} className="w-[250px] h-[200px] bg-red-500" /> */}
         </Link>
 
         {/* Desktop Nav */}
@@ -64,9 +68,13 @@ export default function Navbar() {
         <div className="flex items-center gap-4">
           <a
             href="#"
-            className="hidden md:block font-headline italic text-lg tracking-tight text-amber-600 hover:text-amber-700 transition-all duration-300"
+            className="hidden md:block font-headline italic text-lg tracking-tight  transition-all duration-300"
           >
+            <span className='flex space-x-4'>
+              <BiDonateHeart className="inline text-2xl text-red-500" />
             Give
+            </span>
+            
           </a>
           {/* Mobile Menu Button */}
           <button
@@ -104,7 +112,7 @@ export default function Navbar() {
           ))}
           <a
             href="#"
-            className="block font-headline italic text-xl py-2 text-amber-200"
+            className="block font-headline italic text-xl py-2 "
           >
             Give
           </a>

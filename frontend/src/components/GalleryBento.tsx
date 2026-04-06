@@ -21,11 +21,11 @@ export default function GalleryBento({ items }: GalleryBentoProps) {
             loading="lazy"
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 min-h-[300px] md:min-h-0"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent flex flex-col justify-end p-8">
+           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 to-transparent flex flex-col justify-end p-8">
             <p className="text-tertiary text-xs tracking-widest uppercase font-bold mb-2">
               {main.category}
             </p>
-            <h4 className="font-headline text-2xl text-foreground">{main.caption}</h4>
+            <h4 className="font-headline text-2xl text-white">{main.caption}</h4>
           </div>
         </div>
       )}
@@ -45,7 +45,7 @@ export default function GalleryBento({ items }: GalleryBentoProps) {
             loading="lazy"
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 min-h-[200px] md:min-h-0"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent flex flex-col justify-end p-6">
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 to-transparent flex flex-col justify-end p-6">
             {idx === 0 && (
               <p className="text-tertiary text-xs tracking-widest uppercase font-bold mb-2">
                 {item.category}
