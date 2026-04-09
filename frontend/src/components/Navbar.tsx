@@ -111,7 +111,7 @@ export default function Navbar() {
             </a>
           ))}
           <a
-            href="#"
+            href="give"
             className="block font-headline italic text-xl py-2 "
           >
             Give
