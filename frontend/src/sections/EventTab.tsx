@@ -37,7 +37,7 @@ function parseEventDate(event: ChurchEvent) {
 
 function getCountdown(target: Date) {
   const total = Math.max(0, Math.floor((target.getTime() - Date.now()) / 1000));
-  const hours = Math.floor(total / 3600);
+  const hours = Math.floor(total / 7200);
   const minutes = Math.floor((total % 3600) / 60);
   const seconds = total % 60;
   return { total, hours, minutes, seconds };

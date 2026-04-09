@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { BiDonateHeart } from "react-icons/bi";
-// import logo from '../assets/rccg.png';
+import logo from '../assets/rccg.png';
 
 const navLinks = [
   { label: 'Our Story', href: '#about' },
   { label: 'Sermons', href: '#audio-sermons' },
   { label: 'Community', href: '#gallery' },
-  { label: 'Events', href: '#events' },
+  { label: 'Events', href: 'events' },
 ];
 
 export default function Navbar() {
@@ -42,7 +42,7 @@ export default function Navbar() {
             RCCG LP17 HQ
           </span> */}
 
-          {/* <img src={logo} alt="RCCG LP17 HQ Logo" width={50} height={50} className="w-[250px] h-[200px] bg-red-500" /> */}
+          <img src={logo} alt="RCCG LP17 HQ Logo" width={50} height={50} className="w-[150px] h-[50px] " />
         </Link>
 
         {/* Desktop Nav */}
@@ -67,7 +67,7 @@ export default function Navbar() {
         {/* Right Actions */}
         <div className="flex items-center gap-4">
           <a
-            href="#"
+            href="give"
             className="hidden md:block font-headline italic text-lg tracking-tight  transition-all duration-300"
           >
             <span className='flex space-x-4'>

@@ -3,6 +3,8 @@ import { lazy, Suspense } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
+import Give from './pages/Give';
+import Events from './pages/Events';
 
 // Lazy-load Admin for code splitting
 const Admin = lazy(() => import('./pages/Admin'));
@@ -37,6 +39,26 @@ export default function App() {
         <Route
           path="/"
           element={<MainLayout />}
+        />
+        <Route
+          path="/give"
+          element={
+            <>
+              <Navbar />
+              <Give />
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/events"
+          element={
+            <>
+              <Navbar />
+              <Events />
+              <Footer />
+            </>
+          }
         />
         <Route
           path="/admin"
