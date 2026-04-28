@@ -1,8 +1,42 @@
+import React, { useState, useEffect } from 'react';
 import type { GalleryItem } from '../types';
 
 interface GalleryBentoProps {
   items: GalleryItem[];
 }
+
+interface ImageFrameProps {
+  images: string[];
+  interval: number;
+}
+
+const ImageFrame: React.FC<ImageFrameProps> = ({ images, interval }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex((prevIndex: number) => (prevIndex + 1) % images.length);
+    }, interval);
+
+    return () => clearInterval(timer);
+  }, [images.length, interval]);
+
+  return (
+    <div className="relative w-full h-full overflow-hidden">
+      {images.map((image: string, index: number) => (
+        <img
+          key={index}
+          src={image}
+          alt={`Frame image ${index + 1}`}
+          loading="lazy"
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out group-hover:scale-110 transition-transform ${
+            index === currentIndex ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+      ))}
+    </div>
+  );
+};
 
 export default function GalleryBento({ items }: GalleryBentoProps) {
   const [main, ...rest] = items;
@@ -15,13 +49,8 @@ export default function GalleryBento({ items }: GalleryBentoProps) {
           id={`gallery-item-${main.id}`}
           className="md:col-span-2 md:row-span-2 relative overflow-hidden group rounded-lg"
         >
-          <img
-            src={main.imageUrl}
-            alt={main.caption}
-            loading="lazy"
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 min-h-[300px] md:min-h-0"
-          />
-           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 to-transparent flex flex-col justify-end p-8">
+          <ImageFrame images={main.imageUrls} interval={3000} />
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 to-transparent flex flex-col justify-end p-8">
             <p className="text-tertiary text-xs tracking-widest uppercase font-bold mb-2">
               {main.category}
             </p>
@@ -39,12 +68,7 @@ export default function GalleryBento({ items }: GalleryBentoProps) {
             idx === 0 ? 'md:col-span-2 md:row-span-1' : 'md:col-span-1 md:row-span-1'
           }`}
         >
-          <img
-            src={item.imageUrl}
-            alt={item.caption}
-            loading="lazy"
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 min-h-[200px] md:min-h-0"
-          />
+          <ImageFrame images={item.imageUrls} interval={3000} />
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 to-transparent flex flex-col justify-end p-6">
             {idx === 0 && (
               <p className="text-tertiary text-xs tracking-widest uppercase font-bold mb-2">

@@ -1,5 +1,5 @@
 import Section from "../components/SectionProp";
-import hero from "../assets/kola.png";
+import hero from "../assets/pastor.png";
 
 export default function AboutSection() {
   return (

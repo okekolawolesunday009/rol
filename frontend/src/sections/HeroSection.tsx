@@ -19,8 +19,12 @@ export default function HeroSection() {
           interval={sliderConfig.interval}
           showDots={sliderConfig.showDots}
           showArrows={sliderConfig.showArrows}
+          className=" h-[100vh] "
+          aspectRatio="wide"
+          objectFit="none"
+          imageClassName="transition-transform duration-700 hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-gray-900/20 to-transparent"></div>
       </div>
 
       {/* Content */}
@@ -29,14 +33,14 @@ export default function HeroSection() {
         <div className="text-center space-y-6">
           <p className=' font-headline text-3xl md:text-2xl text-white font-bold tracking-tight'>Welcome to <br /></p>
           
-          <h1 className="font-headline text-5xl md:text-7xl leading-tight text-white font-bold tracking-tight">
+          <h1 className="font-headline text-7xl md:text-7xl leading-tight text-white font-bold tracking-tight">
             
-            <span className="italic ">River of Life Parish </span>
+            <span className="italic ">River of Life  </span>
               <br />
              <span className="italic ">LP17 HQ </span>
           </h1>
           <p className="font-body text-lg text-gray-100 max-w-2xl mx-auto leading-relaxed font-light">
-            A sanctuary for spiritual growth in the heart of the city.
+             The Province of Ultimate Excellence.
           </p>
 
           {/* CTA Buttons */}

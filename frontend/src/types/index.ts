@@ -39,9 +39,10 @@ export interface ChurchEvent {
   updated_at?: string;
 }
 
+
 export interface GalleryItem {
   id: string;
-  imageUrl: string;
+  imageUrls: string[];
   category: string;
   caption: string;
   colSpan?: number;

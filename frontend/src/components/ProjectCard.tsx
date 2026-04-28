@@ -59,7 +59,7 @@ export default function ProjectCard({ project, onSelect }: ProjectCardProps) {
           </div>
         </div>
 
-        {/* CTA */}
+        {/* CTA
         <div className="flex items-center gap-3 text-sm text-white/80 mt-2 pt-3 border-t border-white/10 group-hover:text-white transition-colors duration-200">
           <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
@@ -67,7 +67,7 @@ export default function ProjectCard({ project, onSelect }: ProjectCardProps) {
             </svg>
           </span>
           <span>Select project to give</span>
-        </div>
+        </div> */}
       </div>
     </button>
   );

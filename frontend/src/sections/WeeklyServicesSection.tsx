@@ -24,7 +24,7 @@ export default function WeeklyServicesSection() {
           <div className="relative mt-12">
             <div className="flex flex-col gap-6 md:flex-row md:flex-wrap md:-mx-4">
               {weeklyServices.map((service) => (
-                <div key={service.title} className="md:px-4 md:w-1/2 lg:w-1/4">
+                <div key={service.title} className="md:px-4 md:w-1/2- lg:w-1/4">
                   <ServiceCard service={service} />
                 </div>
               ))}

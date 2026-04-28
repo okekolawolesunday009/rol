@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react';
+import type { ImageSliderImage } from '../data/heroSliderImages';
 
-export interface SliderImage {
-  src: string;
-  alt: string;
-  title?: string;
-}
 
 interface ImageSliderProps {
-  images: SliderImage[] | string[];
+  images: ImageSliderImage[] | string[];
   autoPlay?: boolean;
   interval?: number;
   showDots?: boolean;
   showArrows?: boolean;
+  className?: string;
+  imageClassName?: string;
+  aspectRatio?: 'square' | 'video' | 'wide' | 'portrait' | 'auto';
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+  scale?: number;
 }
 
 export default function ImageSlider({
@@ -20,6 +21,10 @@ export default function ImageSlider({
   interval = 5000,
   showDots = true,
   showArrows = true,
+  className = '',
+  imageClassName = '',
+  aspectRatio = 'auto',
+  objectFit = 'cover',
 }: ImageSliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -50,22 +55,53 @@ export default function ImageSlider({
     setCurrentIndex((prev) => (prev + 1) % normalizedImages.length);
   };
 
+  // Aspect ratio classes
+  const aspectRatioClasses = {
+    square: 'aspect-square',
+    video: 'aspect-video',
+    wide: 'aspect-[16/9]',
+    portrait: 'aspect-[3/4]',
+    auto: '',
+  };
+
+  // Object fit classes
+  const objectFitClasses = {
+    cover: 'object-cover',
+    contain: 'object-contain',
+    fill: 'object-fill',
+    none: 'object-none',
+    'scale-down': 'object-scale-down',
+  };
+
   return (
-    <div className="relative w-full h-full">
+    <div className={`relative w-full ${aspectRatioClasses[aspectRatio]} ${className}`}>
       {/* Images */}
-      <div className="relative w-full h-full overflow-hidden">
+      <div className="relative w-full h-full overflow-hidden rounded-lg">
         {normalizedImages.map((image, index) => (
           <div
             key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
-              index === currentIndex ? 'opacity-100' : 'opacity-0'
+            className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
+              index === currentIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
             }`}
           >
             <img
               src={image.src}
               alt={image.alt}
-              className="w-full h-full object-cover"
+              style={{
+                  objectFit: image.objectFit || 'cover',
+                  transform: image.scale ? `scale(${image.scale})` : 'none',
+                  objectPosition: image.objectPosition || 'center',
+                }}
+              className={`w-full h-full ${objectFitClasses[objectFit]} ${imageClassName}`}
+              loading={index === 0 ? 'eager' : 'lazy'}
+
             />
+            {/* Optional overlay for better text readability */}
+            {image.title && (
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
+                <h3 className="text-white text-xl font-bold">{image.title}</h3>
+              </div>
+            )}
           </div>
         ))}
       </div>
