@@ -61,6 +61,16 @@ export default function App() {
           }
         />
         <Route
+          path="/events/:eventId"
+          element={
+            <>
+              <Navbar />
+              <Events />
+              <Footer />
+            </>
+          }
+        />
+        <Route
           path="/admin"
           element={
             <Suspense fallback={<LoadingSpinner />}>

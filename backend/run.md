@@ -217,9 +217,23 @@ export function useAuth() {
 
 To migrate existing static data to Supabase:
 
-1. Go to Table Editor in Supabase dashboard
-2. Manually add records or use the SQL editor to insert data
-3. Alternatively, create a migration script using the Supabase client
+1. Set up your environment variables in the frontend directory:
+   ```bash
+   # In frontend/.env.local (already created)
+   VITE_SUPABASE_URL=your_supabase_project_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+   # For migration, also set in your shell:
+   export SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+   ```
+
+2. Run the migration script:
+   ```bash
+   cd frontend
+   npm run migrate
+   ```
+
+This will populate your Supabase database with the existing static data from the data files.
 
 ## Deployment
 

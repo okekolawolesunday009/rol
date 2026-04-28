@@ -34,6 +34,9 @@ export interface ChurchEvent {
   time: string;           // e.g. "9:00 AM"
   location: string;       // e.g. "Main Auditorium"
   description?: string;
+  imageUrl?: string;
+  registerUrl?: string;
+  shareUrl?: string;
   ctaLabel?: string;      // e.g. "Register" | "Details" | "Join Us"
   created_at?: string;
   updated_at?: string;
