@@ -7,13 +7,18 @@ const navLinks = [
   { label: 'Our Story', href: '#about' },
   { label: 'Sermons', href: '#audio-sermons' },
   { label: 'Community', href: '#gallery' },
-  { label: 'Events', href: 'events' },
+  { label: 'Events', href: '/events' },
 ];
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === '/';
+
+  const getLinkHref = (href: string) => {
+    if (href.startsWith('/')) return href;
+    return isHome ? href : `/${href}`;
+  };
 
   const handleAnchorClick = (href: string) => {
     setMenuOpen(false);
@@ -50,9 +55,9 @@ export default function Navbar() {
           {navLinks.map((link) => (
             <a
               key={link.label}
-              href={isHome ? link.href : `/${link.href}`}
+              href={getLinkHref(link.href)}
               onClick={(e) => {
-                if (isHome) {
+                if (isHome && !link.href.startsWith('/')) {
                   e.preventDefault();
                   handleAnchorClick(link.href);
                 }
@@ -67,14 +72,13 @@ export default function Navbar() {
         {/* Right Actions */}
         <div className="flex items-center gap-4">
           <a
-            href="give"
+            href="/give"
             className="hidden md:block font-headline italic text-lg tracking-tight  transition-all duration-300"
           >
             <span className='flex space-x-4'>
               <BiDonateHeart className="inline text-2xl text-red-500" />
             Give
             </span>
-            
           </a>
           {/* Mobile Menu Button */}
           <button
@@ -98,9 +102,9 @@ export default function Navbar() {
           {navLinks.map((link) => (
             <a
               key={link.label}
-              href={isHome ? link.href : `/${link.href}`}
+              href={getLinkHref(link.href)}
               onClick={(e) => {
-                if (isHome) {
+                if (isHome && !link.href.startsWith('/')) {
                   e.preventDefault();
                   handleAnchorClick(link.href);
                 }
@@ -111,7 +115,7 @@ export default function Navbar() {
             </a>
           ))}
           <a
-            href="give"
+            href="/give"
             className="block font-headline italic text-xl py-2 "
           >
             Give

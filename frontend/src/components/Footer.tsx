@@ -25,7 +25,7 @@ export default function Footer() {
               RCCG LP17 HQ
             </Link>
             <p className="font-body text-xs tracking-widest uppercase opacity-70 text-tertiary">
-              © {new Date().getFullYear()} RCCG LP17 HQ — The Digital Sanctuary
+              © {new Date().getFullYear()} RCCG LP17 HQ — River Of Life Sanctuary
             </p>
           </div>
 
