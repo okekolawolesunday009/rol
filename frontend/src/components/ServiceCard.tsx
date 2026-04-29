@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import type { WeeklyService } from '../data/weeklyServices';
 
 interface ServiceCardProps {
@@ -8,9 +9,14 @@ export default function ServiceCard({ service }: ServiceCardProps) {
   const Icon = service.icon;
 
   return (
-    <button
+    <motion.button
       type="button"
       className={`group relative w-full min-w-0 rounded-[24px] p-8 shadow-2xl shadow-black/25 transition-transform duration-300 ease-out transform hover:-translate-y-2 hover:scale-[1.03] hover:z-20 overflow-hidden ${service.colorClass} ${service.offsetClass}`}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.55, ease: 'easeOut' }}
+      whileHover={{ scale: 1.04 }}
     >
       <div className="absolute inset-0 bg-white/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 rounded-[24px]" />
       <div className="relative z-10 flex h-full flex-col justify-between gap-6">
@@ -33,6 +39,6 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 
         
       </div>
-    </button>
+    </motion.button>
   );
 }

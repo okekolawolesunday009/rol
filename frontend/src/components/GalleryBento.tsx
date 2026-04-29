@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import type { GalleryItem } from '../types';
 
 interface GalleryBentoProps {
@@ -45,9 +46,13 @@ export default function GalleryBento({ items }: GalleryBentoProps) {
     <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-4 h-auto md:h-[800px]">
       {/* Hero item — spans 2 cols and 2 rows */}
       {main && (
-        <div
+        <motion.div
           id={`gallery-item-${main.id}`}
           className="md:col-span-2 md:row-span-2 relative overflow-hidden group rounded-lg"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.55, ease: 'easeOut' }}
         >
           <ImageFrame images={main.imageUrls} interval={3000} />
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 to-transparent flex flex-col justify-end p-8">
@@ -56,17 +61,21 @@ export default function GalleryBento({ items }: GalleryBentoProps) {
             </p>
             <h4 className="font-headline text-2xl text-white">{main.caption}</h4>
           </div>
-        </div>
+        </motion.div>
       )}
 
       {/* Remaining items */}
       {rest.map((item, idx) => (
-        <div
+        <motion.div
           key={item.id}
           id={`gallery-item-${item.id}`}
           className={`relative overflow-hidden group rounded-lg ${
             idx === 0 ? 'md:col-span-2 md:row-span-1' : 'md:col-span-1 md:row-span-1'
           }`}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.55, ease: 'easeOut', delay: idx * 0.05 }}
         >
           <ImageFrame images={item.imageUrls} interval={3000} />
           <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 to-transparent flex flex-col justify-end p-6">
@@ -79,7 +88,7 @@ export default function GalleryBento({ items }: GalleryBentoProps) {
               {item.caption}
             </h4>
           </div>
-        </div>
+        </motion.div>
       ))}
     </div>
   );

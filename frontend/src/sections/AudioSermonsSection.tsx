@@ -3,10 +3,21 @@ import SectionHeader from '../components/SectionHeader';
 import Section from '../components/SectionProp';
 import { useAudioSermons } from '../hooks/useAudioSermons';
 import { audioSermons as mockAudioSermons } from '../data/audioSermons';
+import { motion } from 'framer-motion';
 
 export default function AudioSermonsSection() {
   const { sermons, loading, error } = useAudioSermons();
   const displaySermons = sermons?.length ? sermons : mockAudioSermons;
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  };
 
   if (loading) {
     return (
@@ -37,9 +48,18 @@ export default function AudioSermonsSection() {
       id="audio-sermons"
       className="py-32 bg-surface-container-low"
     >
-      <div className="max-w-7xl mx-auto px-6 md:px-8">
+      <motion.div
+        className="max-w-7xl mx-auto px-6 md:px-8"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={containerVariants}
+      >
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
+        <motion.div
+          className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6"
+          variants={itemVariants}
+        >
           <SectionHeader
             label="Listen Now"
             title="Audio"
@@ -52,15 +72,18 @@ export default function AudioSermonsSection() {
           >
             View Full Library
           </a>
-        </div>
+        </motion.div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          variants={itemVariants}
+        >
           {displaySermons.map((sermon) => (
             <AudioCard key={sermon.id} sermon={sermon} />
           ))}
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </Section>
   );
 }

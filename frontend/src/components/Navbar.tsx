@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { BiDonateHeart } from "react-icons/bi";
 import logo from '../assets/rccg.png';
 
@@ -34,8 +35,11 @@ export default function Navbar() {
   const buttonTheme = 'hover:text-slate-800';
 
   return (
-    <nav
+    <motion.nav
       className={`fixed top-0 w-full z-50  ${navThemeClasses}`}
+      initial={{ y: -20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.55, ease: 'easeOut' }}
     >
       <div className="flex justify-between items-center max-w-7xl mx-auto px-6 md:px-8 py-5">
         {/* Logo */}
@@ -95,10 +99,15 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Menu */}
-      {menuOpen && (
-        <div
-          className="md:hidden bg-slate-950/95 border-white/5 backdrop-blur-xl border-t px-6 py-6 space-y-4"
-        >
+      <AnimatePresence mode="wait">
+        {menuOpen && (
+          <motion.div
+            className="md:hidden bg-slate-950/95 border-white/5 backdrop-blur-xl border-t px-6 py-6 space-y-4"
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+          >
           {navLinks.map((link) => (
             <a
               key={link.label}
@@ -120,8 +129,9 @@ export default function Navbar() {
           >
             Give
           </a>
-        </div>
+        </motion.div>
       )}
-    </nav>
+      </AnimatePresence>
+    </motion.nav>
   );
 }

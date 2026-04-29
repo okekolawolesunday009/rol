@@ -1,5 +1,6 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -22,52 +23,70 @@ function LoadingSpinner() {
   );
 }
 
-function MainLayout() {
-  return (
-    <>
-      <Navbar />
-      <Home />
-      <Footer />
-    </>
-  );
-}
+function AnimatedRoutes() {
+  const location = useLocation();
 
-export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
         <Route
           path="/"
-          element={<MainLayout />}
+          element={
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+            >
+               <Navbar />
+              <Home/>
+              <Footer />
+            </motion.div>
+          }
         />
         <Route
           path="/give"
           element={
-            <>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+            >
               <Navbar />
               <Give />
               <Footer />
-            </>
+            </motion.div>
           }
         />
         <Route
           path="/events"
           element={
-            <>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+            >
               <Navbar />
               <Events />
               <Footer />
-            </>
+            </motion.div>
           }
         />
         <Route
           path="/events/:eventId"
           element={
-            <>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+            >
               <Navbar />
               <Events />
               <Footer />
-            </>
+            </motion.div>
           }
         />
         <Route
@@ -79,6 +98,14 @@ export default function App() {
           }
         />
       </Routes>
+    </AnimatePresence>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AnimatedRoutes />
     </BrowserRouter>
   );
 }

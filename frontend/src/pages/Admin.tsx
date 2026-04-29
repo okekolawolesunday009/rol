@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import { useAudioSermons } from '../hooks/useAudioSermons';
 import { useVideoSermons } from '../hooks/useVideoSermons';
@@ -30,7 +31,12 @@ function LoginScreen({ onLogin }: { onLogin: (email: string, pass: string) => Pr
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
+    <motion.div
+      className="min-h-screen bg-background flex items-center justify-center px-4"
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
+    >
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-10">
@@ -111,7 +117,12 @@ function AdminDashboard() {
   const [showAddEvent, setShowAddEvent] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background">
+    <motion.div
+      className="min-h-screen bg-background"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.55, ease: 'easeOut' }}
+    >
       {/* Admin Navbar */}
       <nav className="bg-slate-950 border-b border-white/5 px-6 md:px-8 py-4 flex justify-between items-center sticky top-0 z-50">
         <div className="flex items-center gap-3">

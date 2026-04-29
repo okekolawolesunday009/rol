@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { ImageSliderImage } from '../data/heroSliderImages';
+import { motion, AnimatePresence } from 'framer-motion';
 
 
 interface ImageSliderProps {
@@ -77,54 +78,69 @@ export default function ImageSlider({
     <div className={`relative w-full ${aspectRatioClasses[aspectRatio]} ${className}`}>
       {/* Images */}
       <div className="relative w-full h-full overflow-hidden rounded-lg">
-        {normalizedImages.map((image, index) => (
-          <div
-            key={index}
-            className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
-              index === currentIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
-            }`}
-          >
-            <img
-              src={image.src}
-              alt={image.alt}
-              style={{
-                  objectFit: image.objectFit || 'cover',
-                  transform: image.scale ? `scale(${image.scale})` : 'none',
-                  objectPosition: image.objectPosition || 'center',
-                }}
-              className={`w-full h-full ${objectFitClasses[objectFit]} ${imageClassName}`}
-              loading={index === 0 ? 'eager' : 'lazy'}
+        <AnimatePresence mode="wait">
+          {normalizedImages.map((image, index) => (
+            index === currentIndex && (
+              <motion.div
+                key={index}
+                className="absolute inset-0"
+                initial={{ opacity: 0, scale: 1.1 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.7, ease: 'easeInOut' }}
+              >
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  style={{
+                      objectFit: image.objectFit || 'cover',
+                      transform: image.scale ? `scale(${image.scale})` : 'none',
+                      objectPosition: image.objectPosition || 'center',
+                    }}
+                  className={`w-full h-full ${objectFitClasses[objectFit]} ${imageClassName}`}
+                  loading={index === 0 ? 'eager' : 'lazy'}
 
-            />
-            {/* Optional overlay for better text readability */}
-            {image.title && (
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6">
-                <h3 className="text-white text-xl font-bold">{image.title}</h3>
-              </div>
-            )}
-          </div>
-        ))}
+                />
+                {/* Optional overlay for better text readability */}
+                {image.title && (
+                  <motion.div
+                    className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-6"
+                    initial={{ y: 50, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.3, duration: 0.5 }}
+                  >
+                    <h3 className="text-white text-xl font-bold">{image.title}</h3>
+                  </motion.div>
+                )}
+              </motion.div>
+            )
+          ))}
+        </AnimatePresence>
       </div>
 
       {/* Navigation Arrows */}
       {showArrows && (
         <>
-          <button
+          <motion.button
             onClick={goToPrevious}
             className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all duration-300 group"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
             <span className="material-symbols-outlined text-2xl group-hover:scale-110">
               chevron_left
             </span>
-          </button>
-          <button
+          </motion.button>
+          <motion.button
             onClick={goToNext}
             className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all duration-300 group"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
             <span className="material-symbols-outlined text-2xl group-hover:scale-110">
               chevron_right
             </span>
-          </button>
+          </motion.button>
         </>
       )}
 
@@ -132,7 +148,7 @@ export default function ImageSlider({
       {showDots && (
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
           {normalizedImages.map((_, index) => (
-            <button
+            <motion.button
               key={index}
               onClick={() => goToSlide(index)}
               className={`rounded-full transition-all duration-300 ${
@@ -140,6 +156,8 @@ export default function ImageSlider({
                   ? 'bg-white w-3 h-3'
                   : 'bg-white/50 w-2 h-2 hover:bg-white/75'
               }`}
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.8 }}
             />
           ))}
         </div>

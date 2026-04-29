@@ -1,4 +1,5 @@
 import type { VideoSermon } from '../types';
+import { motion } from 'framer-motion';
 
 interface VideoCardProps {
   sermon: VideoSermon;
@@ -7,14 +8,19 @@ interface VideoCardProps {
 
 export default function VideoCard({ sermon, onPlay }: VideoCardProps) {
   return (
-    <div
+    <motion.div
       id={`video-card-${sermon.id}`}
       className="group bg-surface border border-outline/20 hover:border-tertiary/40 rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-tertiary/10 cursor-pointer"
       onClick={() => onPlay(sermon)}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      whileHover={{ scale: 1.02, boxShadow: '0 10px 30px rgba(147, 51, 234, 0.1)' }}
     >
       {/* Thumbnail */}
       <div className="relative aspect-video overflow-hidden bg-surface-container-high">
-        <img
+        <motion.img
           src={sermon.thumbnail}
           alt={sermon.title}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -23,17 +29,22 @@ export default function VideoCard({ sermon, onPlay }: VideoCardProps) {
             (e.target as HTMLImageElement).src =
               'https://placehold.co/640x360/1f1f24/edc06a?text=RCCG+LP17+HQ';
           }}
+          whileHover={{ scale: 1.1 }}
         />
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
         {/* Play button */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-14 h-14 rounded-full bg-tertiary/90 group-hover:bg-tertiary flex items-center justify-center transition-all duration-300 group-hover:scale-110 shadow-lg shadow-black/50">
+          <motion.div
+            className="w-14 h-14 rounded-full bg-tertiary/90 group-hover:bg-tertiary flex items-center justify-center transition-all duration-300 group-hover:scale-110 shadow-lg shadow-black/50"
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.9 }}
+          >
             <span className="material-symbols-outlined text-on-tertiary text-3xl ml-0.5">
               play_arrow
             </span>
-          </div>
+          </motion.div>
         </div>
 
         {/* Duration badge */}
@@ -61,6 +72,6 @@ export default function VideoCard({ sermon, onPlay }: VideoCardProps) {
           </p>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

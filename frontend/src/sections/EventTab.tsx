@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
 import { useEvents } from '../hooks/useEvents';
 import { events as mockEvents } from '../data/events';
 import type { ChurchEvent } from '../types';
@@ -106,7 +107,13 @@ export default function EventTab() {
   }
 
   return (
-    <section className="px-3 py-8">
+    <motion.section
+      className="px-3 py-8"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.25 }}
+      transition={{ duration: 0.7, ease: 'easeOut' }}
+    >
       <div className="max-w-5xl mx-auto">
         <div className="rounded-[2rem] border border-white/10 p-4 shadow-2xl shadow-black/30 backdrop-blur-xl">
           
@@ -165,6 +172,6 @@ export default function EventTab() {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

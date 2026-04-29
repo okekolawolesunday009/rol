@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion';
+
 type SectionProps = {
   children: React.ReactNode;
   bgColor?: string;
@@ -20,9 +22,13 @@ export default function Section({
   className,
 }: SectionProps) {
   return (
-    <section
+    <motion.section
       id={id}
       className={`relative py-16 ${bgColor} ${className ?? ""}`.trim()}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.25 }}
+      transition={{ duration: 0.7, ease: 'easeOut' }}
       style={
         bgImage
           ? {
@@ -41,6 +47,6 @@ export default function Section({
       <div className="relative max-w-6xl mx-auto px-4">
         {children}
       </div>
-    </section>
+    </motion.section>
   );
 }

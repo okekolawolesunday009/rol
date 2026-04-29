@@ -1,4 +1,5 @@
 import type { ChurchEvent } from '../types';
+import { motion } from 'framer-motion';
 
 interface EventCardProps {
   event: ChurchEvent;
@@ -28,15 +29,22 @@ export default function EventCard({ event }: EventCardProps) {
   };
 
   return (
-    <div
+    <motion.div
       id={`event-card-${event.id}`}
       className="group grid grid-cols-1 md:grid-cols-[140px_1fr] gap-6 py-8 border-t border-outline/30 hover:bg-surface/50 transition-all duration-300 px-6 rounded-lg"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      whileHover={{ scale: 1.02, boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}
     >
       {event.imageUrl ? (
-        <img
+        <motion.img
           src={event.imageUrl}
           alt={event.title}
           className="h-44 w-full rounded-3xl object-cover shadow-lg"
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.3 }}
         />
       ) : (
         <div className="h-44 w-full rounded-3xl bg-slate-200" />
@@ -70,28 +78,32 @@ export default function EventCard({ event }: EventCardProps) {
 
         <div className="flex flex-wrap gap-3 mt-6">
           {event.registerUrl ? (
-            <a
+            <motion.a
               href={event.registerUrl}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center justify-center rounded-full bg-tertiary px-4 py-2 text-xs font-bold text-white transition hover:bg-tertiary/90"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               Register
-            </a>
+            </motion.a>
           ) : (
             <span className="inline-flex items-center justify-center rounded-full bg-slate-200 px-4 py-2 text-xs font-bold text-slate-700">
               No registration link
             </span>
           )}
-          <button
+          <motion.button
             type="button"
             onClick={handleShare}
             className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white px-4 py-2 text-xs font-bold text-slate-900 transition hover:bg-slate-50"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             Share
-          </button>
+          </motion.button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
